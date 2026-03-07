@@ -10,6 +10,7 @@
 #include <limits.h>
 #include <cstdio>
 #include <sstream>
+#include <ctime>
 
 namespace Color 
 {
@@ -109,5 +110,8 @@ public:
 
     std::vector<std::string> GetArg(std::string line);
 
+    std::string GetHours();
+
+    std::string CutPath(std::string path);
 
 };

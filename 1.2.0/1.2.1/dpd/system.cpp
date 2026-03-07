@@ -122,7 +122,7 @@ std::string System::SetupMainLoop()
    DisplayHelplist("updlist");
 
    // Prefix 
-    std::cout << Color::GREEN << "Voici le patterne: -[prefix | scriptname]~{ " << Color::RESET ;
+    std::cout << Color::GREEN << "Voici le patterne: [ TIME ] [ prefix@scritname:actual_path ] $" << Color::RESET ;
     std::cout << Color::BLUE << "Entrez le préfixe de votre terminal: " << Color::RESET ;
     std::getline(std::cin, InputName);
 
@@ -202,13 +202,55 @@ std::string System::runCommand(const std::string& cmd)
     return output;
 }
 
+std::string System::GetHours()
+{
+    std::time_t t = std::time(nullptr);
+    std::tm* localTime = std::localtime(&t);
+
+    int hour = localTime->tm_hour;
+    int minute = localTime->tm_min;
+    std::string am_pm = "AM";
+
+    if (hour >= 12) {
+        am_pm = "PM";
+        if (hour > 12) hour -= 12;
+    }
+    if (hour == 0) hour = 12; // minuit
+
+    std::ostringstream oss;
+    oss << std::setw(2) << std::setfill('0') << hour
+        << ":"
+        << std::setw(2) << std::setfill('0') << minute
+        << am_pm;
+
+    return oss.str();
+}
+
+std::string System::CutPath(std::string path)
+{
+   if (path.size() >= 2 && path.front() == '"' && path.back() == '"')
+   {
+      path = path.substr(1, path.size() - 2);
+   }
+
+   return path;
+}
+
+
 void System::MainLoopDkp()
 {
    std::filesystem::path fname = GetFile();
+   std::string Fstem = fname.stem();
+   Fstem = CutPath(Fstem);
+   
 
    while (1)
    {
-      std::cout << Color::YELLOW << "-[ "<< InputName <<" | "<< fname.filename() << "]~{" << Color::RESET;
+      std::string ActualPath =  std::filesystem::current_path();
+      ActualPath = CutPath(ActualPath);
+
+      std::cout << Color::YELLOW << "[ " << Color::RED << GetHours() << Color:: YELLOW << " ] [ "<< Color::RED << InputName << "@" << Fstem << ":" << ActualPath << Color::YELLOW << " ]" << Color::RESET << std::endl;
+      std::cout << "$";
       std::string line;
       std::getline(std::cin, line);
       InputCmd = GetArg(line);
