@@ -1,1 +1,18 @@
-g++ 1.3.0/1.3.1/main.cpp 1.3.0/1.3.1/dpd/system.cpp -lreadline -o dkpshell.out
+#!/bin/sh
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$SCRIPT_DIR/../src"
+MAIN="$SRC_DIR/main.cpp"
+SYSTEM="$SRC_DIR/system.cpp"
+
+if [ ! -f "$MAIN" ]; then
+    echo "main.cpp introuvable"
+    exit 1
+fi
+
+if [ ! -f "$SYSTEM" ]; then
+    echo "system.cpp introuvable"
+    exit 1
+fi
+
+g++ "$MAIN" "$SYSTEM" -lreadline -o "$SCRIPT_DIR/../dkpshell.out"
