@@ -1,4 +1,4 @@
-Basé surle projet [dkpshell](https://github.com/MJVhack/dkpshell) en python.
+Basé sur le projet [dkpshell](https://github.com/MJVhack/dkpshell) en python.
 
 # dkpshell
 
