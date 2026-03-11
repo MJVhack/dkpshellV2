@@ -103,11 +103,50 @@ bool System::AddToPath(std::filesystem::path Fpath)
    catch(const std::filesystem::filesystem_error& e)
    {
       std::cerr << Color::RED << e.what() << Color::RESET << std::endl;
+      return false;
    }
    
    std::cout << Color::GREEN << "Copy réussi: " << destPath << Color::RESET << std::endl;
    return true; 
 
+}
+
+void System::UpdateScr()
+{
+   // Tsais quoi ? nike libcurl.h
+   std::string Cmd = "wget -qO- " + URL_V; 
+   std::string VDown = runCommand(Cmd);
+
+   VDown.erase(std::remove(VDown.begin(), VDown.end(), '\n'), VDown.end());
+   VDown.erase(std::remove(VDown.begin(), VDown.end(), '\r'), VDown.end());
+
+   if (VDown == __version__)
+   {
+      std::cout << Color::GREEN << "Aucune MAJ a faire." << Color::RESET << std::endl;
+   }
+   else
+   {
+      std::string rep;
+      std::cout << Color::BLUE << "Nouvelle version disponible (" << VDown << "), voulez vous l'installer [y/n]: " << Color::RESET;
+      std::getline(std::cin, rep);
+
+      if (rep == "y" || rep == "Y")
+      {
+         Cmd = "wget -O /tmp/dkpshell.out " + URL_N; 
+         runCommand(Cmd);
+
+         Cmd = "rm /usr/local/bin/dkpshell";
+         runCommand(Cmd);
+
+         Cmd = "mv /tmp/dkpshell.out /usr/local/bin/dkpshell";
+         runCommand(Cmd);
+
+         Cmd = "chmod +x /usr/local/bin/dkpshell";
+         runCommand(Cmd);
+
+         std::cout << Color::GREEN << "Execution au prochain dkpshell" << Color::RESET << std::endl;
+      }
+   }
 }
 
 std::string System::SetupMainLoop()
@@ -147,7 +186,7 @@ std::string System::SetupMainLoop()
       }
 
     }
-
+    UpdateScr();
     std::string inpSt;
     std::cout << Color::RED << "Entrez 'start' pour lancer le script: " << Color::RESET;
     std::cin >>inpSt;

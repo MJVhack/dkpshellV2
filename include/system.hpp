@@ -15,6 +15,7 @@
 #include <readline/history.h>
 #include <cstring>
 #include <pwd.h>
+#include <algorithm>
 
 namespace Color 
 {
@@ -46,7 +47,7 @@ namespace Color
 class System
 {
 private:
-    const std::string __version__;
+
     const std::string asciiart = R"(
 <!-- .------------------------------------------------------------------------------------------------. -->
 <!-- |                                                                                                | -->
@@ -69,6 +70,7 @@ private:
                                            BY DKP
     )";
     const bool __stable__;
+    const std::string __version__;
 
     std::vector<std::string> helplist = {"HELP LIST", 
         "Toute les commandes exécuté ici se comporterons exactement de la même faço que d'en votre shell normal",
@@ -85,6 +87,9 @@ private:
     std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit"};
     std::vector<std::string> InputCmd;
     std::string InputName;
+
+    const std::string URL_V = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/refs/heads/master/version.txt";
+    const std::string URL_N = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/compile/dkpshell.out";
 
 
 
@@ -121,4 +126,5 @@ public:
 
     std::string CutPath(std::string path);
 
+    void UpdateScr();
 };
