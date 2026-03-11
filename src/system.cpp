@@ -172,6 +172,7 @@ std::string System::SetupMainLoop()
       std::cout << Color::YELLOW << "Privilège administrateur détecté" << Color::RESET << std::endl;
       std::cout << Color::BLUE << "Est-ce que tu veux l'ajouter au PATH ?[y/n]: " << Color::RESET;
       std::cin >> YoN;
+      std::cin.ignore();
       switch (YoN)
       {
       case 'y': {

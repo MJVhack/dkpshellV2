@@ -1,6 +1,4 @@
-v = 1.3.1
-
-Basé sur le projet [dkpshell](https://github.com/MJVhack/dkpshell) en python.
+Base sur le projet [dkpshell](https://github.com/MJVhack/dkpshell) en python.
 
 # dkpshell
 
