@@ -24,12 +24,12 @@ CAS 1:
 Rendez executable le script
 
 ```
-chmod +x scripts/compil.sh
+chmod +x scripts/compile.sh
 ```
 Vous executez le script
 
 ```
-./scripts/compil.sh
+./scripts/compile.sh
 ```
 Et enfin l'executer
 
