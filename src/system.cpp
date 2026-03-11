@@ -185,9 +185,9 @@ std::string System::SetupMainLoop()
          break;
       
       }
+      UpdateScr();
 
     }
-    UpdateScr();
     std::string inpSt;
     std::cout << Color::RED << "Entrez 'start' pour lancer le script: " << Color::RESET;
     std::cin >>inpSt;
