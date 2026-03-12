@@ -240,9 +240,10 @@ std::filesystem::path System::GetFile()
 std::string System::runCommand(const std::string& cmd)
 {
     std::string output;
+    std::string finalCmd = "bash -c " + std::string(1, '"') + cmd + std::string(1, '"');
 
     using FilePtr = std::unique_ptr<FILE, int(*)(FILE*)>;
-    FilePtr pipe(popen(cmd.c_str(), "r"), pclose);
+    FilePtr pipe(popen(finalCmd.c_str(), "r"), pclose);
 
     if (!pipe)
         return "Erreur : impossible d'ouvrir le pipe\n";
