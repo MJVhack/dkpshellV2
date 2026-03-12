@@ -111,6 +111,18 @@ bool System::AddToPath(std::filesystem::path Fpath)
 
 }
 
+std::string System::GetGitBranch()
+
+{
+   std::string cmd = "git -C . symbolic-ref --short HEAD 2>/dev/null";
+   std::string branch = runCommand(cmd);
+
+   if (!branch.empty() && branch.back() == '\n')
+      branch.pop_back();
+
+   return branch;
+}
+
 void System::UpdateScr()
 {
    // Tsais quoi ? nike libcurl.h
@@ -287,6 +299,8 @@ void System::MainLoopDkp()
    std::string P1s;
    std::ostringstream P2;
    std::string P2s;
+   std::ostringstream P3;
+   std::string P3s;
 
 
    std::ostringstream ActualTheme;
@@ -317,22 +331,38 @@ void System::MainLoopDkp()
       << Color::RED << InputName 
       << "@" << Fstem 
       << ":" << ActualPath 
-      << Color::YELLOW << " ]" 
+      << Color::YELLOW << " ] (" 
+      << Color::RED << GetGitBranch() 
+      << Color::YELLOW << ")"
       << Color::RESET;
       P1s = "$ ";
 
       P2.str("");
       P2.clear();
       P2 << Color::RED << "┌─[" 
-         << Color::WHITE << InputName 
+         << Color::CYAN << InputName 
          << "@" << Fstem 
          << Color::RED << "] [" 
-         << Color::WHITE << ((getuid() == 0) ? "root":"user") 
+         << Color::CYAN << ((getuid() == 0) ? "root":"user") 
          << Color::RED << "] [" 
-         << Color::WHITE << username
+         << Color::CYAN << GetGitBranch()
          << Color::RED << "]";
 
-      P2s = "└─[" + Color::WHITE + ActualPath + Color::RED + "]> " + Color::RESET;
+      P2s = "└─[" + Color::CYAN + ActualPath + Color::RED + "]> " + Color::RESET;
+
+      P3.str("");
+      P3.clear();
+      P3 << Color::BLUE << "[ "
+         << Color::MAGENTA << username
+         << " | " << ActualPath
+         << Color::BLUE << " ] - ("
+         << Color::MAGENTA << GetGitBranch()
+         << Color::BLUE << ")";
+
+      P3s = Color::BLUE + ">> " + Color::RESET;
+
+
+
 
       if (curentTheme == 1)
       {
@@ -344,6 +374,12 @@ void System::MainLoopDkp()
          ActualTheme.str(P2.str());
          ActualThemeSuite = P2s;
       }
+      else if (curentTheme == 3)
+      {
+         ActualTheme.str(P3.str());
+         ActualThemeSuite = P3s;
+      }
+      
       
 
       
@@ -398,6 +434,11 @@ void System::MainLoopDkp()
          {
             curentTheme = 2;
          }
+         else if (InputCmd[1] == "P3")
+         {
+            curentTheme = 3;
+         }
+         
 
          continue;
          
@@ -406,8 +447,6 @@ void System::MainLoopDkp()
       
       
       
-      std::cout << Color::RED << "Commande DKP non reconnu" << Color::RESET << std::endl;
-      std::cout << "" << std::endl;
       std::string result = runCommand(line);
 
       if (result.find("Erreur") != std::string::npos)

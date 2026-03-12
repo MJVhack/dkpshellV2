@@ -127,4 +127,6 @@ public:
     std::string CutPath(std::string path);
 
     void UpdateScr();
+
+    std::string GetGitBranch();
 };
