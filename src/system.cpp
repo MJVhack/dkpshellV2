@@ -302,6 +302,8 @@ void System::MainLoopDkp()
    std::string P2s;
    std::ostringstream P3;
    std::string P3s;
+   std::ostringstream P4;
+   std::string P4s;
 
 
    std::ostringstream ActualTheme;
@@ -362,6 +364,22 @@ void System::MainLoopDkp()
 
       P3s = Color::BLUE + ">> " + Color::RESET;
 
+      P4.str("");
+      P4.clear();
+      P4 << Color::GREEN << "{ "
+         << Color::BLUE << Color::BOLD
+         << "PATH:" << ActualPath
+         << Color::RESET << Color::BLUE 
+         << " : " << Color::BOLD 
+         << username << Color::RESET
+         << Color::GREEN << " ["
+         << Color::BLUE << Color::BOLD
+         << GetGitBranch() << Color::RESET 
+         << Color::GREEN << "] }" 
+         << Color::RESET;
+      
+         P4s = "; ";
+
 
 
 
@@ -379,6 +397,11 @@ void System::MainLoopDkp()
       {
          ActualTheme.str(P3.str());
          ActualThemeSuite = P3s;
+      }
+      else if (curentTheme == 4)
+      {
+         ActualTheme.str(P4.str());
+         ActualThemeSuite = P4s;
       }
       
       
@@ -438,6 +461,10 @@ void System::MainLoopDkp()
          else if (InputCmd[1] == "P3")
          {
             curentTheme = 3;
+         }
+         else if (InputCmd[1] == "P4")
+         {
+            curentTheme = 4;
          }
          
 
