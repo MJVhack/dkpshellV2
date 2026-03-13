@@ -255,6 +255,12 @@ std::string System::runCommand(const std::string& cmd)
     return output;
 }
 
+void System::ClearOSS(std::ostringstream& OSS)
+{
+   OSS.str("");
+   OSS.clear();
+}
+
 std::string System::GetHours()
 {
     std::time_t t = std::time(nullptr);
@@ -288,14 +294,39 @@ std::string System::CutPath(std::string path)
 
    return path;
 }
-
+void System::dkptheme(int& CT, const std::vector<std::string>& INPCMD)
+{
+      if (INPCMD[1] == "P1")
+         {
+            CT = 5;
+         }
+         else if (INPCMD[1] == "P2")
+         {
+            CT = 5;
+         }
+         else if (INPCMD[1] == "P3")
+         {
+            CT = 5;
+         }
+         else if (INPCMD[1] == "P4")
+         {
+            CT = 5;
+         }
+         else if (INPCMD[1] == "P5")
+         {
+            CT = 5;
+         }
+         
+}
 
 void System::MainLoopDkp()
 {
    std::filesystem::path fname = GetFile();
    std::string Fstem = fname.stem();
    Fstem = CutPath(Fstem);
-   read_history("~/.dkpshell-history");
+   
+   int curentTheme = 1;
+
    std::ostringstream P1;
    std::string P1s;
    std::ostringstream P2;
@@ -304,14 +335,14 @@ void System::MainLoopDkp()
    std::string P3s;
    std::ostringstream P4;
    std::string P4s;
-
+   std::ostringstream P5;
+   std::string P5s;
 
    std::ostringstream ActualTheme;
    std::string ActualThemeSuite;
 
-   int curentTheme = 1;
 
-  
+   
 
    while (1)
    {
@@ -321,67 +352,6 @@ void System::MainLoopDkp()
          username = pw->pw_name;
       else
          username = (getuid() == 0) ? "root" : "user";
-
-
-      std::string ActualPath =  std::filesystem::current_path();
-      ActualPath = CutPath(ActualPath);
-
-      P1.str("");
-      P1.clear();
-      P1 << Color::YELLOW << "[ " 
-      << Color::RED << GetHours() 
-      << Color:: YELLOW << " ] [ "
-      << Color::RED << InputName 
-      << "@" << Fstem 
-      << ":" << ActualPath 
-      << Color::YELLOW << " ] (" 
-      << Color::RED << GetGitBranch() 
-      << Color::YELLOW << ")"
-      << Color::RESET;
-      P1s = "$ ";
-
-      P2.str("");
-      P2.clear();
-      P2 << Color::RED << "┌─[" 
-         << Color::CYAN << InputName 
-         << "@" << Fstem 
-         << Color::RED << "] [" 
-         << Color::CYAN << ((getuid() == 0) ? "root":"user") 
-         << Color::RED << "] [" 
-         << Color::CYAN << GetGitBranch()
-         << Color::RED << "]";
-
-      P2s = "└─[" + Color::CYAN + ActualPath + Color::RED + "]> " + Color::RESET;
-
-      P3.str("");
-      P3.clear();
-      P3 << Color::BLUE << "[ "
-         << Color::MAGENTA << username
-         << " | " << ActualPath
-         << Color::BLUE << " ] - ("
-         << Color::MAGENTA << GetGitBranch()
-         << Color::BLUE << ")";
-
-      P3s = Color::BLUE + ">> " + Color::RESET;
-
-      P4.str("");
-      P4.clear();
-      P4 << Color::GREEN << "{ "
-         << Color::BLUE << Color::BOLD
-         << "PATH:" << ActualPath
-         << Color::RESET << Color::BLUE 
-         << " : " << Color::BOLD 
-         << username << Color::RESET
-         << Color::GREEN << " ["
-         << Color::BLUE << Color::BOLD
-         << GetGitBranch() << Color::RESET 
-         << Color::GREEN << "] }" 
-         << Color::RESET;
-      
-         P4s = "; ";
-
-
-
 
       if (curentTheme == 1)
       {
@@ -403,16 +373,85 @@ void System::MainLoopDkp()
          ActualTheme.str(P4.str());
          ActualThemeSuite = P4s;
       }
+      else if (curentTheme == 5)
+      {
+         ActualTheme.str(P5.str());
+         ActualThemeSuite = P5s;
+      }
+      
+      
       
       
 
+
+
+      std::string ActualPath =  std::filesystem::current_path();
+      ActualPath = CutPath(ActualPath);
+
+      ClearOSS(P1);
+      P1 << Color::YELLOW << "[ " 
+      << Color::RED << GetHours() 
+      << Color:: YELLOW << " ] [ "
+      << Color::RED << InputName 
+      << "@" << Fstem 
+      << ":" << ActualPath 
+      << Color::YELLOW << " ] (" 
+      << Color::RED << GetGitBranch() 
+      << Color::YELLOW << ")"
+      << Color::RESET;
+      P1s = "$ ";
+
+      ClearOSS(P2);
+      P2 << Color::RED << "┌─[" 
+         << Color::CYAN << InputName 
+         << "@" << Fstem 
+         << Color::RED << "] [" 
+         << Color::CYAN << ((getuid() == 0) ? "root":"user") 
+         << Color::RED << "] [" 
+         << Color::CYAN << GetGitBranch()
+         << Color::RED << "]";
+
+      P2s = "└─[" + Color::CYAN + ActualPath + Color::RED + "]> " + Color::RESET;
+
+      ClearOSS(P3);
+      P3 << Color::BLUE << "[ "
+         << Color::MAGENTA << username
+         << " | " << ActualPath
+         << Color::BLUE << " ] - ("
+         << Color::MAGENTA << GetGitBranch()
+         << Color::BLUE << ")";
+
+      P3s = Color::BLUE + ">> " + Color::RESET;
+
+      ClearOSS(P4);
+      P4 << Color::GREEN << "{ "
+         << Color::BLUE << Color::BOLD
+         << "PATH:" << ActualPath
+         << Color::RESET << Color::BLUE 
+         << " : " << Color::BOLD 
+         << username << Color::RESET
+         << Color::GREEN << " ["
+         << Color::BLUE << Color::BOLD
+         << GetGitBranch() << Color::RESET 
+         << Color::GREEN << "] }" 
+         << Color::RESET;
       
+         P4s = "; ";
+      
+      ClearOSS(P5);
+      P5 << Color::YELLOW << username
+         << Color::MAGENTA << ": "
+         << Color::YELLOW << ((getuid() == 0) ? "root" : "user")
+         << Color::MAGENTA << " / "
+         << Color::YELLOW << GetGitBranch()
+         << "                                                                                                 " << GetHours()
+         << Color::RESET;
 
-
-      //std::cout << Color::YELLOW << "[ " << Color::RED << GetHours() << Color:: YELLOW << " ] [ "<< Color::RED << InputName << "@" << Fstem << ":" << ActualPath << Color::YELLOW << " ]" << Color::RESET << std::endl;
+      P5s =  Color::RED + ActualPath + "> " + Color::RESET;
+   
       std::cout << ActualTheme.str() << std::endl;
       char* inpt = readline(ActualThemeSuite.c_str());
-      if (inpt == nullptr) {write_history("~/.dkpshell-history"); exit(0);}
+      if (inpt == nullptr) exit(0);
       std::string line(inpt);
       free(inpt);
       if (!line.empty()) add_history(line.c_str());
@@ -445,29 +484,11 @@ void System::MainLoopDkp()
       else if (InputCmd[0] == "exit")
       {
          std::cout << Color::RED << "Exit" << Color::RESET << std::endl;
-         write_history("~/.dkpshell-history");
          exit(0);
       }
       else if (InputCmd[0] == "dkptheme")
       {
-         if (InputCmd[1] == "P1")
-         {
-            curentTheme = 1;
-         }
-         else if (InputCmd[1] == "P2")
-         {
-            curentTheme = 2;
-         }
-         else if (InputCmd[1] == "P3")
-         {
-            curentTheme = 3;
-         }
-         else if (InputCmd[1] == "P4")
-         {
-            curentTheme = 4;
-         }
-         
-
+         dkptheme(curentTheme, InputCmd);
          continue;
          
       }

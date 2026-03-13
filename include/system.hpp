@@ -96,6 +96,7 @@ private:
     const char* homedir = std::getenv("HOME");
 
     
+    
 
 public:
     System();
@@ -129,4 +130,8 @@ public:
     void UpdateScr();
 
     std::string GetGitBranch();
+
+    void ClearOSS(std::ostringstream& OSS);
+
+    void dkptheme(int& CT, const std::vector<std::string>& INPCMD);
 };
