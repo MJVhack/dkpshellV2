@@ -8,15 +8,15 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo "[+] Mise à jour des dépôts"
-apt update
+apt-get update
 
 echo "[+] Installation des outils de compilation"
-apt install -y build-essential g++ gcc make
+apt-get install -y build-essential g++ gcc make
 
 echo "[+] Installation des headers système"
-apt install -y libc6-dev
+apt-get install -y libc6-dev
 
 echo "[+] Installation de readline (pour readline/readline.h)"
-apt install -y libreadline-dev
+apt-get install -y libreadline-dev
 
 echo "[+] Environnement prêt pour compiler"
