@@ -85,7 +85,7 @@ private:
     "dkptool AddToPath {path}",
     "dkptheme P1/2/3/4/5"};
 
-    std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion"};
+    std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion", "1.3.0+ thème, history etc", "1.4.0+ theme, optimize etc"};
     std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit"};
     std::vector<std::string> InputCmd;
     std::string InputName;
