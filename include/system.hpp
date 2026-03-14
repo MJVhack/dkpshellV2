@@ -83,7 +83,7 @@ private:
     std::vector<std::string> HLdkpconfig = {"DKPCONFIG help list",
     "dkpconfig -restartshell : Redémarre le script",
     "dkptool AddToPath {path}",
-    "dkptheme P1/2/3/4"};
+    "dkptheme P1/2/3/4/5"};
 
     std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion"};
     std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit"};

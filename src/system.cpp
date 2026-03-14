@@ -330,27 +330,12 @@ std::string System::CutPath(std::string path)
 }
 void System::dkptheme(int& CT, const std::vector<std::string>& INPCMD)
 {
-   if (INPCMD[1] == "P1")
-   {
-      CT = 5;
-   }
-   else if (INPCMD[1] == "P2")
-   {
-      CT = 5;
-   }
-   else if (INPCMD[1] == "P3")
-   {
-      CT = 5;
-   }
-   else if (INPCMD[1] == "P4")
-   {
-      CT = 5;
-   }
-   else if (INPCMD[1] == "P5")
-   {
-      CT = 5;
-   }
-         
+   if (INPCMD[1] == "P1") CT = 1;
+   else if (INPCMD[1] == "P2") CT = 2;
+   else if (INPCMD[1] == "P3") CT = 3;
+   else if (INPCMD[1] == "P4") CT = 4;
+   else if (INPCMD[1] == "P5") CT = 5;
+   else std::cout << Color::RED << "Invalid theme" << Color::RESET << std::endl;
 }
 
 void System::MainLoopDkp()

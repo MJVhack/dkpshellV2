@@ -68,7 +68,7 @@ Voici les custom command disponible:
   Qui as jutse AddToPath
   
 - dkptheme
-  Qui presente uniquement le thème P1 et P2
+  Qui presente le thème P1, P2, P3,P4 et P5
 
 
 
