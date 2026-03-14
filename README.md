@@ -53,7 +53,7 @@ Et enfin l'executer
 
 Voici son rendu au démarage:
 
-<img width="2621" height="1552" alt="dkpshell_root" src="https://github.com/user-attachments/assets/ffcbe0a7-f6f5-4132-a540-b252aece5b69" />
+<img width="2621" height="1552" alt="dkpshell_root" src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/images/dkpshell1.4.4.png" />
 
 
 Le prefixe est le nom donné au mot ici "ICI@EDDKP:/#"
