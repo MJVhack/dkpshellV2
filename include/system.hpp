@@ -16,6 +16,8 @@
 #include <cstring>
 #include <pwd.h>
 #include <algorithm>
+#include <array>
+#include <sys/wait.h>
 
 namespace Color 
 {
@@ -117,7 +119,7 @@ public:
     bool AddToPath(std::filesystem::path Fpath);
 
     std::filesystem::path GetFile();
-    std::string runCommand(const std::string& cmd);
+    std::pair<int, std::string> runCommand(const std::string& cmd);
 
     void MainLoopDkp();
 

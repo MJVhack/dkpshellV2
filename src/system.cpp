@@ -115,7 +115,7 @@ std::string System::GetGitBranch()
 
 {
    std::string cmd = "git -C . symbolic-ref --short HEAD 2>/dev/null";
-   std::string branch = runCommand(cmd);
+   auto [code, branch] = runCommand(cmd);
 
    if (!branch.empty() && branch.back() == '\n')
       branch.pop_back();
@@ -125,36 +125,64 @@ std::string System::GetGitBranch()
 
 void System::UpdateScr()
 {
+   int code;
+   std::string out;
    // Tsais quoi ? nike libcurl.h
    std::string Cmd = "wget -qO- " + URL_V; 
-   std::string VDown = runCommand(Cmd);
+   std::tie(code, out) = runCommand(Cmd);
+   if (code != 0)
+   {
+      std::cout << Color::RED << "Error" << Color::RESET << std::endl;
+      return;
+   }
 
-   VDown.erase(std::remove(VDown.begin(), VDown.end(), '\n'), VDown.end());
-   VDown.erase(std::remove(VDown.begin(), VDown.end(), '\r'), VDown.end());
+   out.erase(std::remove(out.begin(), out.end(), '\n'), out.end());
+   out.erase(std::remove(out.begin(), out.end(), '\r'), out.end());
 
-   if (VDown == __version__)
+   if (out == __version__)
    {
       std::cout << Color::GREEN << "Aucune MAJ a faire." << Color::RESET << std::endl;
    }
    else
    {
       std::string rep;
-      std::cout << Color::BLUE << "Nouvelle version disponible (" << VDown << "), voulez vous l'installer [y/n]: " << Color::RESET;
+      std::cout << Color::BLUE << "Nouvelle version disponible (" << out << "), voulez vous l'installer [y/n]: " << Color::RESET;
       std::getline(std::cin, rep);
 
       if (rep == "y" || rep == "Y")
       {
          Cmd = "wget -O /tmp/dkpshell.out " + URL_N; 
-         runCommand(Cmd);
+         std::tie(code, out) = runCommand(Cmd);
+         if (code != 0)
+         {
+            std::cout << Color::RED << "Error" << Color::RESET << std::endl;
+            return;
+         }
 
          Cmd = "rm /usr/local/bin/dkpshell";
-         runCommand(Cmd);
+         std::tie(code, out) = runCommand(Cmd);
+         if (code != 0)
+         {
+            std::cout << Color::RED << "Error" << Color::RESET << std::endl;
+            return;
+         }
 
          Cmd = "mv /tmp/dkpshell.out /usr/local/bin/dkpshell";
-         runCommand(Cmd);
+         std::tie(code, out) = runCommand(Cmd);
+         if (code != 0)
+         {
+            std::cout << Color::RED << "Error" << Color::RESET << std::endl;
+            return;
+         }
+
 
          Cmd = "chmod +x /usr/local/bin/dkpshell";
-         runCommand(Cmd);
+         std::tie(code, out) = runCommand(Cmd);
+         if (code != 0)
+         {
+            std::cout << Color::RED << "Error" << Color::RESET << std::endl;
+            return;
+         }
 
          std::cout << Color::GREEN << "Execution au prochain dkpshell" << Color::RESET << std::endl;
       }
@@ -237,22 +265,28 @@ std::filesystem::path System::GetFile()
    return exePath;
 }
 
-std::string System::runCommand(const std::string& cmd)
+std::pair<int, std::string> System::runCommand(const std::string& cmd)
 {
     std::string output;
-    std::string finalCmd = "bash -c " + std::string(1, '"') + cmd + std::string(1, '"');
+    std::string finalCmd = "bash -c \"" + cmd + "\"";
 
     using FilePtr = std::unique_ptr<FILE, int(*)(FILE*)>;
     FilePtr pipe(popen(finalCmd.c_str(), "r"), pclose);
 
     if (!pipe)
-        return "Erreur : impossible d'ouvrir le pipe\n";
+        return {-1, "Erreur : impossible d'ouvrir le pipe\n"};
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr)
         output += buffer;
 
-    return output;
+    int retCode = pclose(pipe.release()); 
+    if (WIFEXITED(retCode))
+        retCode = WEXITSTATUS(retCode);
+    else
+        retCode = -1; 
+
+    return {retCode, output};
 }
 
 void System::ClearOSS(std::ostringstream& OSS)
@@ -296,26 +330,26 @@ std::string System::CutPath(std::string path)
 }
 void System::dkptheme(int& CT, const std::vector<std::string>& INPCMD)
 {
-      if (INPCMD[1] == "P1")
-         {
-            CT = 5;
-         }
-         else if (INPCMD[1] == "P2")
-         {
-            CT = 5;
-         }
-         else if (INPCMD[1] == "P3")
-         {
-            CT = 5;
-         }
-         else if (INPCMD[1] == "P4")
-         {
-            CT = 5;
-         }
-         else if (INPCMD[1] == "P5")
-         {
-            CT = 5;
-         }
+   if (INPCMD[1] == "P1")
+   {
+      CT = 5;
+   }
+   else if (INPCMD[1] == "P2")
+   {
+      CT = 5;
+   }
+   else if (INPCMD[1] == "P3")
+   {
+      CT = 5;
+   }
+   else if (INPCMD[1] == "P4")
+   {
+      CT = 5;
+   }
+   else if (INPCMD[1] == "P5")
+   {
+      CT = 5;
+   }
          
 }
 
@@ -341,9 +375,6 @@ void System::MainLoopDkp()
    std::ostringstream ActualTheme;
    std::string ActualThemeSuite;
 
-
-   
-
    while (1)
    {
       struct passwd* pw = getpwuid(getuid());
@@ -353,52 +384,20 @@ void System::MainLoopDkp()
       else
          username = (getuid() == 0) ? "root" : "user";
 
-      if (curentTheme == 1)
-      {
-         ActualTheme.str(P1.str());
-         ActualThemeSuite = P1s;
-      }
-      else if (curentTheme == 2)
-      {
-         ActualTheme.str(P2.str());
-         ActualThemeSuite = P2s;
-      }
-      else if (curentTheme == 3)
-      {
-         ActualTheme.str(P3.str());
-         ActualThemeSuite = P3s;
-      }
-      else if (curentTheme == 4)
-      {
-         ActualTheme.str(P4.str());
-         ActualThemeSuite = P4s;
-      }
-      else if (curentTheme == 5)
-      {
-         ActualTheme.str(P5.str());
-         ActualThemeSuite = P5s;
-      }
-      
-      
-      
-      
-
-
-
       std::string ActualPath =  std::filesystem::current_path();
       ActualPath = CutPath(ActualPath);
 
       ClearOSS(P1);
       P1 << Color::YELLOW << "[ " 
-      << Color::RED << GetHours() 
-      << Color:: YELLOW << " ] [ "
-      << Color::RED << InputName 
-      << "@" << Fstem 
-      << ":" << ActualPath 
-      << Color::YELLOW << " ] (" 
-      << Color::RED << GetGitBranch() 
-      << Color::YELLOW << ")"
-      << Color::RESET;
+         << Color::RED << GetHours() 
+         << Color:: YELLOW << " ] [ "
+         << Color::RED << InputName 
+         << "@" << Fstem 
+         << ":" << ActualPath 
+         << Color::YELLOW << " ] (" 
+         << Color::RED << GetGitBranch() 
+         << Color::YELLOW << ")"
+         << Color::RESET;
       P1s = "$ ";
 
       ClearOSS(P2);
@@ -448,7 +447,34 @@ void System::MainLoopDkp()
          << Color::RESET;
 
       P5s =  Color::RED + ActualPath + "> " + Color::RESET;
-   
+      
+      if (curentTheme == 1)
+      {
+         ActualTheme.str(P1.str());
+         ActualThemeSuite = P1s;
+      }
+      else if (curentTheme == 2)
+      {
+         ActualTheme.str(P2.str());
+         ActualThemeSuite = P2s;
+      }
+      else if (curentTheme == 3)
+      {
+         ActualTheme.str(P3.str());
+         ActualThemeSuite = P3s;
+      }
+      else if (curentTheme == 4)
+      {
+         ActualTheme.str(P4.str());
+         ActualThemeSuite = P4s;
+      }
+      else if (curentTheme == 5)
+      {
+         ActualTheme.str(P5.str());
+         ActualThemeSuite = P5s;
+      }
+
+
       std::cout << ActualTheme.str() << std::endl;
       char* inpt = readline(ActualThemeSuite.c_str());
       if (inpt == nullptr) exit(0);
@@ -496,15 +522,15 @@ void System::MainLoopDkp()
       
       
       
-      std::string result = runCommand(line);
+      auto [code, out] = runCommand(line);
 
-      if (result.find("Erreur") != std::string::npos)
+      if (code != 0)
       {
-         std::cout << Color::RED << result << Color::RESET << std::endl;
+         std::cout << Color::RED << out << Color::RESET << std::endl;
       }
       else
       {
-         std::cout << Color::GREEN << result << Color::RESET << std::endl;
+         std::cout << Color::GREEN << out << Color::RESET << std::endl;
       }
       
    }

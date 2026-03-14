@@ -19,4 +19,7 @@ apt-get install -y libc6-dev
 echo "[+] Installation de readline (pour readline/readline.h)"
 apt-get install -y libreadline-dev
 
+echo "[+] Installation des dépendences annexes"
+apt-get install wget
+
 echo "[+] Environnement prêt pour compiler"
