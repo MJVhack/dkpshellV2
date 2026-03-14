@@ -2,7 +2,7 @@
 
 int main(void)
 {
-    System dkpshell("1.4.3", true);
+    System dkpshell("1.4.4", true);
     dkpshell.SetupMainLoop();
     dkpshell.MainLoopDkp();
 
