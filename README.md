@@ -43,7 +43,7 @@ Utilier le .out dans [release](https://github.com/MJVhack/dkpshellV2/releases/ta
 
 Voici son rendu au démarage:
 
-<img width="2621" height="1552" alt="dkpshell_root" src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/images/dkpshell1.4.4.png" />
+<img width="2621" height="1552" alt="dkpshell_root" src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/images/dkpshell1.4.7.png" />
 
 
 Le prefixe est le nom donné au mot ici "ICI@EDDKP:/#"
@@ -57,9 +57,11 @@ Voici les custom command disponible:
 - dkptool
   Qui as jutse AddToPath
 - dkptheme
-  Qui presente le thème P1, P2, P3,P4 et P5
--dkpalias 
+  Qui presente le thème P1, P2, P3, P4 et P5
+- dkpalias 
   Intègre des alias dans le shell
+- dkpinfo
+  Affiche les infos du script
 
 
 

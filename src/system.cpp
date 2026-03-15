@@ -158,6 +158,17 @@ void System::ModifyAlias(const std::string& name, const std::string& newCmd) {
     }
 }
 
+void System::ScriptInfo()
+{
+   std::cout << Color::CYAN << "Version: "
+   << __version__ << std::endl << "Stability: "
+   << __stable__ << std::endl << "Github script: "
+   << GitHubLink << std::endl << "Creator: "
+   << Creator << std::endl << "GitHub: " 
+   << GitHub << std::endl << "Discord: "
+   << Discord << Color::RESET << std::endl;   
+}
+
 std::string System::GetGitBranch()
 
 {
@@ -644,6 +655,18 @@ void System::MainLoopDkp()
             else DisplayHelplist(AliasHL);
             continue;
       }
+      else if (InputCmd[0] == "dkpinfo")
+      {
+         ScriptInfo();
+         continue;
+      }
+      else if (InputCmd[0] == "dkp")
+      {
+         DisplayHelplist(CmdList);
+         continue;
+      }
+      
+      
       
       if (!InputCmd.empty() && aliases.find(InputCmd[0]) != aliases.end()) {
          std::string aliasCmd = aliases[InputCmd[0]];

@@ -87,17 +87,21 @@ private:
     "dkpconfig -restartshell : Redémarre le script",
     "dkptool AddToPath {path}",
     "dkptheme P1/2/3/4/5",
-    "dkpalias set/remove/modify."};
+    "dkpalias set/remove/modify/listalias.",
+    "dkpinfo: affiche ls infos du scripts"};
 
     std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion", "1.3.0+ thème, history etc", "1.4.0+ theme, optimize etc", "1.4.7: add alias"};
-    std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit"};
+    std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit", "dkpalias", "dkpinfo"};
     std::vector<std::string> AliasHL = {"set: Créer un alias: dkpalias set name cmd", "remove: supprime un alias: dkptheme remove name", "modify: modifie un alias: dkpalias modify name new_cmd", "listalias: liste tousles alias présents dans dkpalias: dkpalias listalias"};
     std::vector<std::string> InputCmd;
     std::string InputName;
 
     const std::string URL_V = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/refs/heads/master/version.txt";
     const std::string URL_N = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/compile/dkpshell.out";
-
+    const std::string GitHubLink = "https://github.com/MJVhack/dkpshellV2/tree/master";
+    const std::string Creator = "MJVhack";
+    const std::string GitHub = "https://github.com/MJVhack";
+    const std::string Discord = "evil.diabriek3";
     
 
     const char* homedir = std::getenv("HOME");
@@ -152,4 +156,6 @@ public:
     void ModifyAlias(const std::string& name, const std::string& newCmd);
     std::vector<std::string> loadOrCreateAliasFile(const std::string& path = "/.dkpalias");
     void ListAlias();
+
+    void ScriptInfo();
 };
