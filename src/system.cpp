@@ -462,6 +462,7 @@ void System::dkptheme(int& CT, const std::vector<std::string>& INPCMD)
    else if (INPCMD[1] == "P3") CT = 3;
    else if (INPCMD[1] == "P4") CT = 4;
    else if (INPCMD[1] == "P5") CT = 5;
+   else if (INPCMD[1] == "P6") CT = 6;
    else DisplayHelplist(HLdkpconfig);
 }
 
@@ -568,6 +569,11 @@ void System::MainLoopDkp()
 
       Ps[4] =  Color::RED + ActualPath + "> " + Color::RESET;
       
+      ClearOSS(P[5]);
+      P[5].str("NULL");
+
+      Ps[5] = "% ";
+
       if (curentTheme == 1)
       {
          ActualTheme.str(P[0].str());
@@ -593,9 +599,14 @@ void System::MainLoopDkp()
          ActualTheme.str(P[4].str());
          ActualThemeSuite = Ps[4];
       }
+      else if (curentTheme == 6)
+      {
+         ActualTheme.str(P[5].str());
+         ActualThemeSuite = Ps[5];
+      }
+      
 
-
-      std::cout << ActualTheme.str() << std::endl;
+      if (ActualTheme.str() != "NULL") std::cout << ActualTheme.str() << std::endl;
       char* inpt = readline(ActualThemeSuite.c_str());
       if (inpt == nullptr) exit(0);
       std::string line(inpt);
