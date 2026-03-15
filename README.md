@@ -37,17 +37,7 @@ Et enfin l'executer
 
 Cas 2:
 
-Rendre executable directement le pré compile
-
-```
-chmod +x compile/dkpshell.out
-```
-
-Et enfin l'executer
-
-```
-./compile/dkpshell.out
-```
+Utilier le .out dans [release](https://github.com/MJVhack/dkpshellV2/releases/tag/compiled)
 
 # Utilisation
 
