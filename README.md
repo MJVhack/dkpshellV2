@@ -69,7 +69,7 @@ Voici les custom command disponible:
 - dkptheme
   Qui presente le thème P1, P2, P3,P4 et P5
 -dkpalias 
-  Intègre desalias dans le shell
+  Intègre des alias dans le shell
 
 
 
