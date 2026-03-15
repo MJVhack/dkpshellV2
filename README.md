@@ -6,6 +6,11 @@ Il est destiné aux systèmes **Linux** et n’est pas compatible avec **Windows
 La première version du projet a été développée en **Python**.
 La version actuelle est une réécriture en **C++** visant de meilleures performances et une architecture plus robuste.
 
+<img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" />
+<img src="https://img.shields.io/badge/Linux-shell-blue?style=for-the-badge&logo=gnu-bash" />
+<img src="https://img.shields.io/github/stars/MJVhack/dkpshellV2?style=for-the-badge" />
+<img src="https://img.shields.io/github/issues/MJVhack/dkpshellV2?style=for-the-badge" />
+
 ---
 
 ## Fonctionnalités
@@ -64,7 +69,9 @@ https://github.com/MJVhack/dkpshellV2/releases/tag/compiled
 
 Voici l’apparence du shell au démarrage :
 
-<img src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/images/dkpshell1.4.7.png" />
+<img src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/assets/dkpshell1.4.7.png" />
+
+![Voici une courte vidéo](assets/dkpshel.gif)
 
 Le préfixe correspond au prompt du shell, par exemple :
 
