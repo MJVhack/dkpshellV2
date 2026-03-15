@@ -1,74 +1,142 @@
-Base sur le projet [dkpshell](https://github.com/MJVhack/dkpshell) en python.
-
 # dkpshell
 
-Dkpshell est un shell intéractif fait pour renouveler les anciens bash et sh. Fait uniquement pour Linux, il n'est pas compatible windows.
-Sa première version a été développer en python, pour cette version, c'est le langage C++ qui a été choisi.
+**dkpshell** est un shell interactif conçu pour moderniser l’expérience des shells classiques comme Bash ou sh.
+Il est destiné aux systèmes **Linux** et n’est pas compatible avec **Windows**.
 
-# Installation
+La première version du projet a été développée en **Python**.
+La version actuelle est une réécriture en **C++** visant de meilleures performances et une architecture plus robuste.
 
-Dans un premier temps, cloner le projet:
-```
+---
+
+## Fonctionnalités
+
+* Shell interactif
+* Personnalisation du prompt
+* Système d’alias intégré
+* Thèmes pour modifier l’apparence
+* Outils intégrés pour la configuration
+* Détection de la branche Git
+
+---
+
+## Installation
+
+### 1. Cloner le projet
+
+```bash
 git clone -b master https://github.com/MJVhack/dkpshellV2
-```
-Ensuite, entrez dans le dossier
-
-```
 cd dkpshellV2
 ```
 
-CAS 1:
+---
 
-Rendez executable le script
+### 2. Compilation
 
-```
+Rendre le script exécutable :
+
+```bash
 chmod +x scripts/compile.sh
 ```
-Vous executez le script
 
-```
+Compiler le projet :
+
+```bash
 ./scripts/compile.sh
 ```
-Et enfin l'executer
 
-```
+Lancer le shell :
+
+```bash
 ./dkpshell.out
 ```
 
-Cas 2:
+---
 
-Utilier le .out dans [release](https://github.com/MJVhack/dkpshellV2/releases/tag/compiled)
+### Alternative
 
-# Utilisation
+Un binaire précompilé est disponible dans la section releases :
 
-Voici son rendu au démarage:
+https://github.com/MJVhack/dkpshellV2/releases/tag/compiled
 
-<img width="2621" height="1552" alt="dkpshell_root" src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/images/dkpshell1.4.7.png" />
+---
 
+## Aperçu
 
-Le prefixe est le nom donné au mot ici "ICI@EDDKP:/#"
-Sans root, le demande du PATH sera ignoré et jamais demander.
+Voici l’apparence du shell au démarrage :
 
-# Custom Commande
+<img src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/images/dkpshell1.4.7.png" />
 
-Voici les custom command disponible:
-- dkpconfig
-  Qui ne présente uniquement -restartshell
-- dkptool
-  Qui as jutse AddToPath
-- dkptheme
-  Qui presente le thème P1, P2, P3, P4 et P5
-- dkpalias 
-  Intègre des alias dans le shell
-- dkpinfo
-  Affiche les infos du script
+Le préfixe correspond au prompt du shell, par exemple :
 
+```
+ICI@EDDKP:/#
+```
 
+Lorsque le shell n’est pas exécuté en **root**, la demande du **PATH** est ignorée.
 
+---
 
+## Commandes personnalisées
 
+dkpshell inclut plusieurs commandes internes.
 
+### dkpconfig
 
+Gestion de la configuration du shell.
 
+Option disponible :
 
+```
+-restartshell
+```
 
+---
+
+### dkptool
+
+Outils utilitaires pour le shell.
+
+Fonction principale :
+
+```
+AddToPath
+```
+
+---
+
+### dkptheme
+
+Permet de changer le thème du shell.
+
+Thèmes disponibles :
+
+```
+P1
+P2
+P3
+P4
+P5
+```
+
+---
+
+### dkpalias
+
+Permet d’ajouter des alias directement dans le shell.
+
+---
+
+### dkpinfo
+
+Affiche les informations sur le shell et son environnement.
+
+---
+
+## Objectif du projet
+
+dkpshell vise à proposer :
+
+* un shell léger
+* facilement personnalisable
+* extensible
+* simple à utiliser
