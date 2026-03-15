@@ -24,7 +24,7 @@ La version actuelle est une réécriture en **C++** visant de meilleures perform
 ### 1. Cloner le projet
 
 ```bash
-git clone -b master https://github.com/MJVhack/dkpshellV2
+git clone https://github.com/MJVhack/dkpshellV2
 cd dkpshellV2
 ```
 
