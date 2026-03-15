@@ -651,34 +651,42 @@ void System::MainLoopDkp()
       }
       else if (InputCmd[0] == "dkpalias")
       {
-            if (InputCmd[1] == "set") {
-               if (InputCmd.size() < 2) { DisplayHelplist(AliasHL); continue; }
-               if (InputCmd[1] == "set" && InputCmd.size() < 4) { DisplayHelplist(AliasHL); continue; }
-               std::string cmdValue;
-               for (size_t i = 3; i < InputCmd.size(); i++) {
-                  if (i > 3) cmdValue += " ";   
-                  cmdValue += InputCmd[i];
-               }
-               AddAlias(InputCmd[2], cmdValue);   
+         if (InputCmd.size() < 2) { DisplayHelplist(AliasHL); continue; }
+
+         auto buildCmd = [&](size_t from) {
+            std::string val;
+            for (size_t i = from; i < InputCmd.size(); ++i) {
+               if (i > from) val += " ";
+               if (InputCmd[i].find(' ') != std::string::npos)
+                  val += "\"" + InputCmd[i] + "\"";
+               else
+                  val += InputCmd[i];
             }
-            else if (InputCmd[1] == "remove") {
-               RemoveAlias(InputCmd[2]);         
-            }
-            else if (InputCmd[1] == "modify") {
-               std::string cmdValue;
-               for (size_t i = 3; i < InputCmd.size(); i++) {
-                  if (i > 3) cmdValue += " ";
-                  cmdValue += InputCmd[i];
-               }
-               ModifyAlias(InputCmd[2], cmdValue); 
-            }
-            else if (InputCmd[1] == "listalias")
-            {
-               ListAlias();
-            }
-            
-            else DisplayHelplist(AliasHL);
-            continue;
+            return val;
+         };
+
+         if (InputCmd[1] == "set") {
+            if (InputCmd.size() < 4) { DisplayHelplist(AliasHL); continue; }
+            AddAlias(InputCmd[2], buildCmd(3));
+         }
+         else if (InputCmd[1] == "remove") {
+            if (InputCmd.size() < 3) { DisplayHelplist(AliasHL); continue; }
+            RemoveAlias(InputCmd[2]);
+         }
+         else if (InputCmd[1] == "modify") {
+            if (InputCmd.size() < 4) { DisplayHelplist(AliasHL); continue; }
+            ModifyAlias(InputCmd[2], buildCmd(3));
+         }
+         else if (InputCmd[1] == "listalias") {
+            ListAlias();
+         }
+         else if (InputCmd.size() >= 3) {
+            AddAlias(InputCmd[1], buildCmd(2));
+         }
+         else {
+         DisplayHelplist(AliasHL);
+         }
+         continue;
       }
       else if (InputCmd[0] == "dkpinfo")
       {
