@@ -65,16 +65,41 @@ void System::RestartShell()
 
 std::vector<std::string> System::GetArg(std::string line)
 {
-   std::stringstream cline(line);
-   std::vector<std::string> MultiW;
-   std::string OneW;
+    std::vector<std::string> MultiW;
+    std::string token;
+    bool inSingle = false;
+    bool inDouble = false;
 
-   while (cline >> OneW)
-   {
-      MultiW.push_back(OneW);
-   }
-   return MultiW;
+    for (size_t i = 0; i < line.size(); ++i)
+    {
+        char c = line[i];
 
+        if (c == '\'' && !inDouble)
+        {
+            inSingle = !inSingle;   
+        }
+        else if (c == '"' && !inSingle)
+        {
+            inDouble = !inDouble;   
+        }
+        else if (c == ' ' && !inSingle && !inDouble)
+        {
+            if (!token.empty())     
+            {
+                MultiW.push_back(token);
+                token.clear();
+            }
+        }
+        else
+        {
+            token += c;
+        }
+    }
+
+    if (!token.empty())
+        MultiW.push_back(token);   
+
+    return MultiW;
 }
 
 bool System::AddToPath(std::filesystem::path Fpath)
