@@ -3,6 +3,8 @@
  System::System()
     : __version__("0.0.1")
     , __stable__(false)
+    , P(10)
+    , Ps(10)
  {
     InputName.reserve(200);
  }
@@ -10,6 +12,8 @@
  System::System(System& system)
     : __version__(system.__version__)
     , __stable__(system.__stable__)
+    , P(10)
+    , Ps(10)
  {
     InputName.reserve(200);
  }
@@ -17,6 +21,8 @@
  System::System(std::string version, bool stable)
     : __version__(version)
     , __stable__(stable)
+    , P(10)
+    , Ps(10)
  {
     InputName.reserve(200);
  }
@@ -36,31 +42,12 @@ bool System::GetStability()
  }
 
 
-void System::DisplayHelplist(std::string Thl)
+void System::DisplayHelplist(std::vector<std::string>& hlp)
 {
-   if (Thl == "hp")
+   for (int i = 0; i < hlp.size(); ++i)
    {
-      for (int i = 0; i < helplist.size(); ++i)
-      {
-         std::cout << Color::BLUE << helplist[i] << Color::RESET << std::endl;
-      }
+      std::cout << Color::BLUE << hlp[i] << Color::RESET << std::endl;
    }
-   else if (Thl == "dkphp")
-   {
-      for (int i = 0; i < HLdkpconfig.size(); ++i)
-      {
-         std::cout << Color::BLUE << HLdkpconfig[i] << Color::RESET << std::endl;
-      }
-   }
-   else if (Thl == "updlist")
-   {
-      for (int i = 0; i < UpdList.size(); ++i)
-      {
-         std::cout << Color::BLUE << UpdList[i] << Color::RESET << std::endl;
-      }
-   }
-   
-   
 }
 
 void System::RestartShell()
@@ -109,6 +96,57 @@ bool System::AddToPath(std::filesystem::path Fpath)
    std::cout << Color::GREEN << "Copy réussi: " << destPath << Color::RESET << std::endl;
    return true; 
 
+}
+
+void System::AddAlias(const std::string& name, const std::string& cmd) {
+    std::ofstream file(aliasP, std::ios::app);
+    if (file.is_open()) {                      
+        file << name << "=" << cmd << "\n";   
+    }
+}
+
+void System::RemoveAlias(const std::string& name) {
+    std::ifstream file(aliasP);                     
+    std::map<std::string, std::string> aliases;  
+    std::string line;
+
+    while (std::getline(file, line)) {           
+        size_t pos = line.find('=');             
+        if (pos != std::string::npos) {
+            std::string key = line.substr(0, pos); 
+            if (key != name) {                    
+                aliases[key] = line.substr(pos + 1); 
+            }
+        }
+    }
+    file.close();
+
+    std::ofstream out(aliasP, std::ios::trunc);    
+    for (auto& [key, val] : aliases) {
+        out << key << "=" << val << "\n";        
+    }
+}
+
+void System::ModifyAlias(const std::string& name, const std::string& newCmd) {
+    std::ifstream file(aliasP);
+    std::map<std::string, std::string> aliases;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        size_t pos = line.find('=');
+        if (pos != std::string::npos) {
+            std::string key = line.substr(0, pos);
+            std::string val = line.substr(pos + 1);
+            if (key == name) val = newCmd;
+            aliases[key] = val;
+        }
+    }
+    file.close();
+
+    std::ofstream out(aliasP, std::ios::trunc);    
+    for (auto& [key, val] : aliases) {
+        out << key << "=" << val << "\n";
+    }
 }
 
 std::string System::GetGitBranch()
@@ -198,7 +236,7 @@ std::string System::SetupMainLoop()
    std::cout << Color::MAGENTA << asciiart << Color::RESET << std::endl;
    std::cout << "__version__: " << __version__ << std::endl;
    std::cout << "__stable__: " << __stable__ << std::endl;
-   DisplayHelplist("updlist");
+   DisplayHelplist(UpdList);
 
    // Prefix 
     std::cout << Color::GREEN << "Voici le patterne: [ TIME ] [ prefix@scritname:actual_path ] $" << Color::RESET << std::endl;
@@ -295,6 +333,50 @@ void System::ClearOSS(std::ostringstream& OSS)
    OSS.clear();
 }
 
+std::string System::transformVtoSS(const std::vector<std::string>& INPCMD)
+{
+   std::string cmd;
+
+   for (size_t i = 0; i < INPCMD.size(); ++i)
+   {
+     if (i > 0)
+         cmd += " ";
+
+     cmd += INPCMD[i];
+   }
+
+   return cmd;
+   
+}
+
+std::vector<std::string> System::loadOrCreateAliasFile(const std::string& path) {
+    std::vector<std::string> lines;
+
+    if (!fs::exists(path)) {
+        std::ofstream createFile(path);
+        if (!createFile.is_open()) {
+            std::cerr << "Impossible de créer le fichier " << path << "\n";
+            return lines;
+        }
+        createFile.close();
+        std::cout << "Fichier créé : " << path << "\n";
+    }
+
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Impossible d'ouvrir le fichier " << path << "\n";
+        return lines;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (!line.empty()) lines.push_back(line); 
+    }
+    file.close();
+
+    return lines; 
+}
+
 std::string System::GetHours()
 {
     std::time_t t = std::time(nullptr);
@@ -308,7 +390,7 @@ std::string System::GetHours()
         am_pm = "PM";
         if (hour > 12) hour -= 12;
     }
-    if (hour == 0) hour = 12; // minuit
+    if (hour == 0) hour = 12; 
 
     std::ostringstream oss;
     oss << std::setw(2) << std::setfill('0') << hour
@@ -335,7 +417,7 @@ void System::dkptheme(int& CT, const std::vector<std::string>& INPCMD)
    else if (INPCMD[1] == "P3") CT = 3;
    else if (INPCMD[1] == "P4") CT = 4;
    else if (INPCMD[1] == "P5") CT = 5;
-   else std::cout << Color::RED << "Invalid theme" << Color::RESET << std::endl;
+   else DisplayHelplist(HLdkpconfig);
 }
 
 void System::MainLoopDkp()
@@ -346,22 +428,30 @@ void System::MainLoopDkp()
    
    int curentTheme = 1;
 
-   std::ostringstream P1;
-   std::string P1s;
-   std::ostringstream P2;
-   std::string P2s;
-   std::ostringstream P3;
-   std::string P3s;
-   std::ostringstream P4;
-   std::string P4s;
-   std::ostringstream P5;
-   std::string P5s;
+   // std::ostringstream P1;
+   // std::string P1s;
+   // std::ostringstream P2;
+   // std::string P2s;
+   // std::ostringstream P3;
+   // std::string P3s;
+   // std::ostringstream P4;
+   // std::string P4s;
+   // std::ostringstream P5;
+   // std::string P5s;
 
    std::ostringstream ActualTheme;
    std::string ActualThemeSuite;
-
+   
    while (1)
    {
+      auto aliasLines = System::loadOrCreateAliasFile();
+      std::map<std::string,std::string> aliases;
+      for (auto& line : aliasLines) {
+         size_t pos = line.find('=');
+         if (pos != std::string::npos) {
+            aliases[line.substr(0,pos)] = line.substr(pos+1);
+         }
+      }
       struct passwd* pw = getpwuid(getuid());
       std::string username;
       if (pw)
@@ -372,8 +462,8 @@ void System::MainLoopDkp()
       std::string ActualPath =  std::filesystem::current_path();
       ActualPath = CutPath(ActualPath);
 
-      ClearOSS(P1);
-      P1 << Color::YELLOW << "[ " 
+      ClearOSS(P[0]);
+      P[0] << Color::YELLOW << "[ " 
          << Color::RED << GetHours() 
          << Color:: YELLOW << " ] [ "
          << Color::RED << InputName 
@@ -383,10 +473,10 @@ void System::MainLoopDkp()
          << Color::RED << GetGitBranch() 
          << Color::YELLOW << ")"
          << Color::RESET;
-      P1s = "$ ";
+      Ps[0] = "$ ";
 
-      ClearOSS(P2);
-      P2 << Color::RED << "┌─[" 
+      ClearOSS(P[1]);
+      P[1] << Color::RED << "┌─[" 
          << Color::CYAN << InputName 
          << "@" << Fstem 
          << Color::RED << "] [" 
@@ -395,20 +485,20 @@ void System::MainLoopDkp()
          << Color::CYAN << GetGitBranch()
          << Color::RED << "]";
 
-      P2s = "└─[" + Color::CYAN + ActualPath + Color::RED + "]> " + Color::RESET;
+      Ps[1] = "└─[" + Color::CYAN + ActualPath + Color::RED + "]> " + Color::RESET;
 
-      ClearOSS(P3);
-      P3 << Color::BLUE << "[ "
+      ClearOSS(P[2]);
+      P[2] << Color::BLUE << "[ "
          << Color::MAGENTA << username
          << " | " << ActualPath
          << Color::BLUE << " ] - ("
          << Color::MAGENTA << GetGitBranch()
          << Color::BLUE << ")";
 
-      P3s = Color::BLUE + ">> " + Color::RESET;
+      Ps[2] = Color::BLUE + ">> " + Color::RESET;
 
-      ClearOSS(P4);
-      P4 << Color::GREEN << "{ "
+      ClearOSS(P[3]);
+      P[3] << Color::GREEN << "{ "
          << Color::BLUE << Color::BOLD
          << "PATH:" << ActualPath
          << Color::RESET << Color::BLUE 
@@ -420,10 +510,10 @@ void System::MainLoopDkp()
          << Color::GREEN << "] }" 
          << Color::RESET;
       
-         P4s = "; ";
+      Ps[3] = "; ";
       
-      ClearOSS(P5);
-      P5 << Color::YELLOW << username
+      ClearOSS(P[4]);
+      P[4] << Color::YELLOW << username
          << Color::MAGENTA << ": "
          << Color::YELLOW << ((getuid() == 0) ? "root" : "user")
          << Color::MAGENTA << " / "
@@ -431,32 +521,32 @@ void System::MainLoopDkp()
          << "                                                                                                 " << GetHours()
          << Color::RESET;
 
-      P5s =  Color::RED + ActualPath + "> " + Color::RESET;
+      Ps[4] =  Color::RED + ActualPath + "> " + Color::RESET;
       
       if (curentTheme == 1)
       {
-         ActualTheme.str(P1.str());
-         ActualThemeSuite = P1s;
+         ActualTheme.str(P[0].str());
+         ActualThemeSuite = Ps[0];
       }
       else if (curentTheme == 2)
       {
-         ActualTheme.str(P2.str());
-         ActualThemeSuite = P2s;
+         ActualTheme.str(P[1].str());
+         ActualThemeSuite = Ps[1];
       }
       else if (curentTheme == 3)
       {
-         ActualTheme.str(P3.str());
-         ActualThemeSuite = P3s;
+         ActualTheme.str(P[2].str());
+         ActualThemeSuite = Ps[2];
       }
       else if (curentTheme == 4)
       {
-         ActualTheme.str(P4.str());
-         ActualThemeSuite = P4s;
+         ActualTheme.str(P[3].str());
+         ActualThemeSuite = Ps[3];
       }
       else if (curentTheme == 5)
       {
-         ActualTheme.str(P5.str());
-         ActualThemeSuite = P5s;
+         ActualTheme.str(P[4].str());
+         ActualThemeSuite = Ps[4];
       }
 
 
@@ -476,7 +566,7 @@ void System::MainLoopDkp()
             RestartShell();
             continue;
          }
-         DisplayHelplist("dkphp");
+         DisplayHelplist(HLdkpconfig);
          continue;
       }
       else if (InputCmd[0] == "dkptool")
@@ -503,20 +593,64 @@ void System::MainLoopDkp()
          continue;
          
       }
+      else if (InputCmd[0] == "apt")
+      {
+         std::cout << Color::YELLOW << "Apt doesn't have a good CLI interface, trasform apt to apt-get..." << std::endl;
+         InputCmd[0] = "apt-get";
+         std::string cmd = transformVtoSS(InputCmd);
+         auto[code, out] = runCommand(cmd);
+
+         if (code != 0) std::cout << Color::RED << out << Color::RESET << std::endl;
+         else std::cout << Color::GREEN << out << Color::RESET << std::endl;
+
+      }
+      else if (InputCmd[0] == "dkpalias")
+      {
+            if (InputCmd[1] == "set") {
+               if (InputCmd.size() < 2) { DisplayHelplist(AliasHL); continue; }
+               if (InputCmd[1] == "set" && InputCmd.size() < 4) { DisplayHelplist(AliasHL); continue; }
+               std::string cmdValue;
+               for (size_t i = 3; i < InputCmd.size(); i++) {
+                  if (i > 3) cmdValue += " ";   
+                  cmdValue += InputCmd[i];
+               }
+               AddAlias(InputCmd[2], cmdValue);   
+            }
+            else if (InputCmd[1] == "remove") {
+               RemoveAlias(InputCmd[2]);         
+            }
+            else if (InputCmd[1] == "modify") {
+               std::string cmdValue;
+               for (size_t i = 3; i < InputCmd.size(); i++) {
+                  if (i > 3) cmdValue += " ";
+                  cmdValue += InputCmd[i];
+               }
+               ModifyAlias(InputCmd[2], cmdValue); 
+            }
+            else DisplayHelplist(AliasHL);
+            continue;
+      }
       
+      if (!InputCmd.empty() && aliases.find(InputCmd[0]) != aliases.end()) {
+         std::string aliasCmd = aliases[InputCmd[0]];
+
+
+         for (size_t i = 1; i < InputCmd.size(); i++) {
+            aliasCmd += " " + InputCmd[i];
+         }
+
+         auto [code, out] = runCommand(aliasCmd);
+         if (code != 0) std::cout << Color::RED << out << Color::RESET << std::endl;
+         else std::cout << Color::GREEN << out << Color::RESET << std::endl;
+         continue;
+      }
       
       
       
       auto [code, out] = runCommand(line);
 
-      if (code != 0)
-      {
-         std::cout << Color::RED << out << Color::RESET << std::endl;
-      }
-      else
-      {
-         std::cout << Color::GREEN << out << Color::RESET << std::endl;
-      }
+      if (code != 0) std::cout << Color::RED << out << Color::RESET << std::endl;
+      else std::cout << Color::GREEN << out << Color::RESET << std::endl;
       
    }
 }

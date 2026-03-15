@@ -18,6 +18,9 @@
 #include <algorithm>
 #include <array>
 #include <sys/wait.h>
+#include <map>
+namespace fs = std::filesystem;
+
 
 namespace Color 
 {
@@ -83,24 +86,29 @@ private:
     std::vector<std::string> HLdkpconfig = {"DKPCONFIG help list",
     "dkpconfig -restartshell : Redémarre le script",
     "dkptool AddToPath {path}",
-    "dkptheme P1/2/3/4/5"};
+    "dkptheme P1/2/3/4/5",
+    "dkpalias set/remove/modify."};
 
-    std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion", "1.3.0+ thème, history etc", "1.4.0+ theme, optimize etc"};
+    std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion", "1.3.0+ thème, history etc", "1.4.0+ theme, optimize etc", "1.4.7: add alias"};
     std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit"};
+    std::vector<std::string> AliasHL = {"set: Créer un alias: dkpalias set name cmd", "remove: supprime un alias: dkptheme remove name", "modify: modifie un alias: dkpalias modify name new_cmd"};
     std::vector<std::string> InputCmd;
     std::string InputName;
 
     const std::string URL_V = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/refs/heads/master/version.txt";
     const std::string URL_N = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/compile/dkpshell.out";
 
-
+    
 
     const char* homedir = std::getenv("HOME");
+    const std::string aliasP = "/.dkpalias";
 
     
     
 
 public:
+    std::vector<std::ostringstream> P;
+    std::vector<std::string> Ps;
     System();
     System(System& Isystem);
     System(std::string version, bool stable);
@@ -112,7 +120,7 @@ public:
 
     void RestartShell();
 
-    void DisplayHelplist(std::string Thp);
+    void DisplayHelplist(std::vector<std::string>& hlp);
 
     std::string SetupMainLoop();
 
@@ -136,4 +144,11 @@ public:
     void ClearOSS(std::ostringstream& OSS);
 
     void dkptheme(int& CT, const std::vector<std::string>& INPCMD);
+
+    std::string transformVtoSS(const std::vector<std::string>& INPCMD);
+
+    void AddAlias(const std::string& name, const std::string& cmd);
+    void RemoveAlias( const std::string& name);
+    void ModifyAlias(const std::string& name, const std::string& newCmd);
+    std::vector<std::string> loadOrCreateAliasFile(const std::string& path = "/.dkpalias");
 };

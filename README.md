@@ -66,9 +66,10 @@ Voici les custom command disponible:
   Qui ne présente uniquement -restartshell
 - dkptool
   Qui as jutse AddToPath
-  
 - dkptheme
   Qui presente le thème P1, P2, P3,P4 et P5
+-dkpalias 
+  Intègre desalias dans le shell
 
 
 
