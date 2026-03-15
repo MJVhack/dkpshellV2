@@ -148,7 +148,8 @@ public:
     std::string transformVtoSS(const std::vector<std::string>& INPCMD);
 
     void AddAlias(const std::string& name, const std::string& cmd);
-    void RemoveAlias( const std::string& name);
+    void RemoveAlias(const std::string& name);
     void ModifyAlias(const std::string& name, const std::string& newCmd);
     std::vector<std::string> loadOrCreateAliasFile(const std::string& path = "/.dkpalias");
+    void ListAlias();
 };

@@ -127,6 +127,15 @@ void System::RemoveAlias(const std::string& name) {
     }
 }
 
+void System::ListAlias()
+{
+   std::string cmdcat = "cat /.dkpalias";
+   auto[code, alias] = runCommand(cmdcat);
+   if (code != 0) std::cout << Color::RED << alias << Color::RESET << std::endl;
+   else std::cout << Color::GREEN << alias << Color::RESET << std::endl;
+   
+}
+
 void System::ModifyAlias(const std::string& name, const std::string& newCmd) {
     std::ifstream file(aliasP);
     std::map<std::string, std::string> aliases;
