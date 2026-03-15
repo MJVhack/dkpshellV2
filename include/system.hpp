@@ -98,7 +98,7 @@ private:
 
     const std::string URL_V = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/refs/heads/master/version.txt";
     const std::string URL_N = "https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/compile/dkpshell.out";
-    const std::string GitHubLink = "https://github.com/MJVhack/dkpshellV2/tree/master";
+    const std::string GitHubLink = "https://github.com/MJVhack/dkpshellV2";
     const std::string Creator = "MJVhack";
     const std::string GitHub = "https://github.com/MJVhack";
     const std::string Discord = "evil.diabriek3";
