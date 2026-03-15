@@ -71,7 +71,7 @@ Voici l’apparence du shell au démarrage :
 
 <img src="https://raw.githubusercontent.com/MJVhack/dkpshellV2/master/assets/dkpshell1.4.7.png" />
 
-![Voici une courte vidéo](assets/dkpshel.gif)
+![Voici une courte vidéo](assets/dkpshell.gif)
 
 Le préfixe correspond au prompt du shell, par exemple :
 
