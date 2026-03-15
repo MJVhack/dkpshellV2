@@ -636,6 +636,11 @@ void System::MainLoopDkp()
                }
                ModifyAlias(InputCmd[2], cmdValue); 
             }
+            else if (InputCmd[1] == "listalias")
+            {
+               ListAlias();
+            }
+            
             else DisplayHelplist(AliasHL);
             continue;
       }
