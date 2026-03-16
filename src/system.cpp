@@ -1,4 +1,5 @@
 #include "system.hpp"
+#include "dkpnet.hpp"
 
  System::System()
     : __version__("0.0.1")
@@ -709,6 +710,41 @@ void System::MainLoopDkp()
          DisplayHelplist(CmdList);
          continue;
       }
+      else if (InputCmd[0] == "dkpnet")
+{
+      if (InputCmd.size() < 2)
+      {
+        std::cout << Color::CYAN
+                  << "Usage:\n"
+                  << "  dkpnet take              → attendre un fichier\n"
+                  << "  dkpnet send <ip> <file>  → envoyer un fichier\n"
+                  << Color::RESET;
+        continue;
+    }
+
+      if (InputCmd[1] == "take")
+      {
+        int port = (InputCmd.size() >= 3) ? std::stoi(InputCmd[2]) : DkpNet::DEFAULT_PORT;
+        DkpNet::Take(port);
+      }
+    else if (InputCmd[1] == "send")
+    {
+        if (InputCmd.size() < 4)
+        {
+            std::cout << Color::RED
+                      << "Usage: dkpnet send <ip> <fichier>\n"
+                      << Color::RESET;
+            continue;
+        }
+        int port = (InputCmd.size() >= 5) ? std::stoi(InputCmd[4]) : DkpNet::DEFAULT_PORT;
+        DkpNet::Send(InputCmd[2], InputCmd[3], port);
+    }
+    else
+    {
+        std::cout << Color::RED << "Sous-commande inconnue.\n" << Color::RESET;
+    }
+    continue;
+}
       
       
       
