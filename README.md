@@ -139,6 +139,10 @@ Affiche les informations sur le shell et son environnement.
 
 ---
 
+### dkpnet
+
+Permet de communiquer des fichiers en LAN
+
 ## Objectif du projet
 
 dkpshell vise à proposer :
