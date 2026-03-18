@@ -52,9 +52,11 @@ Compiler le projet :
 Lancer le shell :
 
 ```bash
-./dkpshell.out
+./dkpshell.out --name root --addtopath --start
 ```
-
+--name: nom (ou préfixe)
+--addtopah: si il doit etre dans /usr/local/bin
+--start: pour demarrer directement le script
 ---
 
 ### Alternative

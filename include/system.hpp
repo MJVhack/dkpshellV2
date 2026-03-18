@@ -82,16 +82,18 @@ private:
         "Toute les customs command: ",
         "dkpconfig",
         "dkptool",
-        "dkptheme"};
+        "dkptheme",
+        "dkpnet"};
     std::vector<std::string> HLdkpconfig = {"DKPCONFIG help list",
     "dkpconfig -restartshell : Redémarre le script",
     "dkptool AddToPath {path}",
     "dkptheme P1/2/3/4/5",
     "dkpalias set/remove/modify/listalias.",
-    "dkpinfo: affiche ls infos du scripts"};
+    "dkpinfo: affiche ls infos du scripts",
+    "dkpnet take/send"};
 
     std::vector<std::string> UpdList = {"Ajout de la commande: dkptool AddToPath", "1.3.0: auto completion", "1.3.0+ thème, history etc", "1.4.0+ theme, optimize etc", "1.4.7: add alias"};
-    std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit", "dkpalias", "dkpinfo"};
+    std::vector<std::string> CmdList = {"dkpconfig", "dkptool", "exit", "dkpalias", "dkpinfo", "dkpnet"};
     std::vector<std::string> AliasHL = {"set: Créer un alias: dkpalias set name cmd", "remove: supprime un alias: dkptheme remove name", "modify: modifie un alias: dkpalias modify name new_cmd", "listalias: liste tousles alias présents dans dkpalias: dkpalias listalias"};
     std::vector<std::string> InputCmd;
     std::string InputName;
@@ -126,7 +128,7 @@ public:
 
     void DisplayHelplist(std::vector<std::string>& hlp);
 
-    std::string SetupMainLoop();
+    std::string SetupMainLoop(char *name, char YoN, bool start);
 
     bool AddToPath(std::filesystem::path Fpath);
 

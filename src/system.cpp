@@ -273,62 +273,67 @@ void System::UpdateScr()
    }
 }
 
-std::string System::SetupMainLoop()
+std::string System::SetupMainLoop(char* name, char YoN, bool start)
 {
-   // On clear
-   system("clear");
+    system("clear");
+    std::cout << Color::MAGENTA << asciiart << Color::RESET << std::endl;
+    std::cout << "__version__: " << __version__ << std::endl;
+    std::cout << "__stable__: "  << __stable__  << std::endl;
+    DisplayHelplist(UpdList);
 
-   //Ascii art bien géant
-   std::cout << Color::MAGENTA << asciiart << Color::RESET << std::endl;
-   std::cout << "__version__: " << __version__ << std::endl;
-   std::cout << "__stable__: " << __stable__ << std::endl;
-   DisplayHelplist(UpdList);
-
-   // Prefix 
-    std::cout << Color::GREEN << "Voici le patterne: [ TIME ] [ prefix@scritname:actual_path ] $" << Color::RESET << std::endl;
-    std::cout << Color::BLUE << "Entrez le préfixe de votre terminal: " << Color::RESET ;
-    std::getline(std::cin, InputName);
-
-   //AddToPath
-    if (getuid() == 0) 
+    // Nom du préfixe
+    if (name == nullptr)
     {
-      char YoN;
-      std::cout << Color::YELLOW << "Privilège administrateur détecté" << Color::RESET << std::endl;
-      std::cout << Color::BLUE << "Est-ce que tu veux l'ajouter au PATH ?[y/n]: " << Color::RESET;
-      std::cin >> YoN;
-      std::cin.ignore();
-      switch (YoN)
-      {
-      case 'y': {
-         bool ATP = AddToPath(GetFile());
-         std::cout << ((ATP) ? Color::GREEN:Color::RED)<< "AddToPath " << ((ATP) ? "réussi.":"échoué.") << Color::RESET << std::endl;
-         break;
-      }
-
-      case 'n':
-         break;
-      
-      }
-      UpdateScr();
-
-    }
-    std::string inpSt;
-    std::cout << Color::RED << "Entrez 'start' pour lancer le script: " << Color::RESET;
-    std::cin >>inpSt;
-
-    if (inpSt == "start")
-    {
-      MainLoopDkp();
-      return "started";
+        std::cout << Color::GREEN << "Voici le patterne: [ TIME ] [ prefix@scritname:actual_path ] $" << Color::RESET << std::endl;
+        std::cout << Color::BLUE  << "Entrez le préfixe de votre terminal: " << Color::RESET;
+        std::getline(std::cin, InputName);
     }
     else
     {
-      std::cout << Color::RED << "Quit" << Color::RESET << std::endl;
-      exit(0);
-      return "quit";
+        InputName = std::string(name);
     }
-    
 
+    // AddToPath
+    if (getuid() == 0)
+    {
+        std::cout << Color::YELLOW << "Privilège administrateur détecté" << Color::RESET << std::endl;
+
+        if (YoN == 'n')  // pas passé en arg → on demande
+        {
+            std::cout << Color::BLUE << "Est-ce que tu veux l'ajouter au PATH ?[y/n]: " << Color::RESET;
+            std::cin >> YoN;
+            std::cin.ignore();
+        }
+
+        if (YoN == 'y')
+        {
+            bool ATP = AddToPath(GetFile());
+            std::cout << ((ATP) ? Color::GREEN : Color::RED)
+                      << "AddToPath " << ((ATP) ? "réussi." : "échoué.")
+                      << Color::RESET << std::endl;
+        }
+
+        UpdateScr();
+    }
+
+    // Start
+    if (!start)
+    {
+        std::string inpSt;
+        std::cout << Color::RED << "Entrez 'start' pour lancer le script: " << Color::RESET;
+        std::cin >> inpSt;
+        std::cin.ignore();
+
+        if (inpSt != "start")
+        {
+            std::cout << Color::RED << "Quit" << Color::RESET << std::endl;
+            exit(0);
+            return "quit";
+        }
+    }
+
+    MainLoopDkp();
+    return "started";
 }
 
 std::filesystem::path System::GetFile()
