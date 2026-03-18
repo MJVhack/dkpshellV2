@@ -53,10 +53,11 @@ Lancer le shell :
 
 ```bash
 ./dkpshell.out --name root --addtopath --start
-```
+
 --name: nom (ou préfixe)
---addtopah: si il doit etre dans /usr/local/bin
+--addtopath: si il doit etre dans /usr/local/bin
 --start: pour demarrer directement le script
+```
 ---
 
 ### Alternative
